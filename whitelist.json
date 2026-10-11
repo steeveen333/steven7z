@@ -1,0 +1,9 @@
+{
+  "_comment": "toxicity hub Cloud Whitelist. Add Roblox UserIDs or Usernames to 'whitelisted'.",
+  "status": "active",
+  "version": "3.0",
+  "whitelisted": [
+    "steeveen333",
+    "YOUR_ROBLOX_USER_ID_HERE"
+  ]
+}
