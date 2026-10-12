@@ -15,18 +15,19 @@ local function notify(title, text, duration)
         StarterGui:SetCore("SendNotification", {
             Title = title or "toxicity hub",
             Text = text or "",
-            Duration = duration or 4
+            Duration = duration or 5
         })
     end)
+    print("[" .. tostring(title) .. "] " .. tostring(text))
 end
 
-notify("toxicity hub", "Loading Survive the Killer V3...", 3)
+notify("toxicity hub", "Downloading menu...", 3)
 
-local payloadUrl = "https://raw.githubusercontent.com/steeveen333/steven7z/main/payload.lua?nocache=" .. tostring(tick())
+local payloadUrl = "https://raw.githubusercontent.com/steeveen333/steven7z/main/payload.lua?nocache=" .. tostring(math.floor(tick()))
 local payloadCode = nil
 
-local loadOk = pcall(function()
-    payloadCode = game:HttpGet(payloadUrl, true)
+local loadOk, loadErr = pcall(function()
+    payloadCode = game:HttpGet(payloadUrl)
 end)
 
 if not loadOk or not payloadCode or payloadCode == "" then
@@ -40,14 +41,17 @@ if not loadOk or not payloadCode or payloadCode == "" then
 end
 
 if not payloadCode or payloadCode == "" then
-    notify("toxicity hub", "Error: Unable to fetch payload. Check connection.", 5)
+    notify("toxicity hub", "Download error: Check internet or GitHub status.", 6)
     return
 end
 
 local executeFn, syntaxErr = loadstring(payloadCode, "toxicity.payload")
 if not executeFn then
-    notify("toxicity hub", "Compilation error: " .. tostring(syntaxErr), 6)
+    notify("toxicity hub", "Compile error: " .. tostring(syntaxErr), 7)
     return
 end
 
-task.spawn(executeFn)
+local runOk, runErr = pcall(executeFn)
+if not runOk then
+    notify("toxicity hub", "Runtime error: " .. tostring(runErr), 7)
+end
